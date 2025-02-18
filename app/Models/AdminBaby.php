@@ -9,8 +9,8 @@ class AdminBaby extends Model
 {
     use HasFactory;
     // protected $table = 'data_baby_admin';
-    // protected $table = 'data_training';
-    protected $table = 'training';
+    protected $table = 'data_training';
+    // protected $table = 'training';
     protected $fillable = [
         'age',
         'weight',

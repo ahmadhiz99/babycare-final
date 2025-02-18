@@ -29,7 +29,9 @@ class AdminController extends Controller
             // var_dump($report->report_monthly);
             // echo $report->report_monthly;
             // dd($report);
-            array_push($datareports, $report->report_monthly);
+            if(isset($report->report_monthly)){
+                array_push($datareports, $report->report_monthly);
+            }
         }
         $dataparent = [];
         
@@ -566,7 +568,10 @@ class AdminController extends Controller
          foreach($dataBuruk as $d){
              $jmlUmur += $d->age;
          }
-         $meanUmurBuruk = $jmlUmur/count($dataBuruk);
+
+        if(count($dataBuruk) > 0){
+            $meanUmurBuruk = $jmlUmur/count($dataBuruk);
+        }
  
          $jmlUmur = 0;
          foreach($dataKurang as $d){
@@ -584,7 +589,10 @@ class AdminController extends Controller
          foreach($dataResikoLebih as $d){
              $jmlUmur += $d->age;
          }
-         $meanUmurResikoLebih = $jmlUmur/count($dataResikoLebih);
+
+         if(count($dataResikoLebih) > 0){
+            $meanUmurResikoLebih = $jmlUmur/count($dataResikoLebih);
+         }
  
          $jmlUmur = 0;
          foreach($dataLebih as $d){
@@ -596,15 +604,19 @@ class AdminController extends Controller
          foreach($dataObesitas as $d){
              $jmlUmur += $d->age;
          }
-         $meanUmurObesitas = $jmlUmur/count($dataObesitas);
+         if(count($dataObesitas) > 0){
+            $meanUmurObesitas = $jmlUmur/count($dataObesitas);
+         }
  
          /// BB
          $jmlBB = 0;
          foreach($dataBuruk as $d){
              $jmlBB += $d->weight;
          }
-         $meanBBBuruk = $jmlBB/count($dataBuruk);
- 
+         if(count($dataBuruk) > 0){
+            $meanBBBuruk = $jmlBB/count($dataBuruk);
+         }
+
          $jmlBB = 0;
          foreach($dataKurang as $d){
              $jmlBB += $d->weight;
@@ -621,7 +633,9 @@ class AdminController extends Controller
          foreach($dataResikoLebih as $d){
              $jmlBB += $d->weight;
          }
-         $meanBBResikoLebih = $jmlBB/count($dataResikoLebih);
+         if(count($dataResikoLebih) > 0){
+            $meanBBResikoLebih = $jmlBB/count($dataResikoLebih);
+         }
  
          $jmlBB = 0;
          foreach($dataLebih as $d){
@@ -633,14 +647,18 @@ class AdminController extends Controller
          foreach($dataObesitas as $d){
              $jmlBB += $d->weight;
          }
+         if(count($dataObesitas) > 0){
          $meanBBObesitas = $jmlBB/count($dataObesitas);
+         }
  
          /// TB
          $jmlTB = 0;
          foreach($dataBuruk as $d){
              $jmlTB += $d->length;
          }
+         if(count($dataBuruk) > 0){
          $meanTBBuruk = $jmlTB/count($dataBuruk);
+         }
  
          $jmlTB = 0;
          foreach($dataKurang as $d){
@@ -658,7 +676,9 @@ class AdminController extends Controller
          foreach($dataResikoLebih as $d){
              $jmlTB += $d->length;
          }
+         if(count($dataResikoLebih) > 0){
          $meanTBResikoLebih = $jmlTB/count($dataResikoLebih);
+         }
  
          $jmlTB = 0;
          foreach($dataLebih as $d){
@@ -670,7 +690,9 @@ class AdminController extends Controller
          foreach($dataObesitas as $d){
              $jmlTB += $d->length;
          }
+         if(count($dataObesitas) > 0){
          $meanTBObesitas = $jmlTB/count($dataObesitas);
+         }
       
          //CARI DEVIASI STANDARD
          /// a = tentukan jumlah data per atribut perclass
@@ -878,45 +900,80 @@ class AdminController extends Controller
  
          //Umur
          //P(Umur|Buruk)
-         $probUmurBuruk = (1/sqrt(2 * 3.14  * $stdevUmurBuruk)) * (exp(-( pow( $age - $meanUmurBuruk ,2) / (2 * pow($stdevUmurBuruk,2)))));
-         //P(Umur|Kurang)
-         $probUmurKurang = (1/sqrt(2 * 3.14  * $stdevUmurKurang)) * (exp(-( pow( $age - $meanUmurKurang ,2) / (2 * pow($stdevUmurKurang,2)))));
-         //P(Umur|Baik)
-         $probUmurBaik = (1/sqrt(2 * 3.14  * $stdevUmurBaik)) * (exp(-( pow( $age - $meanUmurBaik ,2) / (2 * pow($stdevUmurBaik,2)))));
-         //P(Umur|ResikoLebih)
-         $probUmurResikoLebih = (1/sqrt(2 * 3.14  * $stdevUmurResikoLebih)) * (exp(-( pow( $age - $meanUmurResikoLebih ,2) / (2 * pow($stdevUmurResikoLebih,2)))));
-         //P(Umur|Lebih)
-         $probUmurLebih = (1/sqrt(2 * 3.14  * $stdevUmurLebih)) * (exp(-( pow( $age - $meanUmurLebih ,2) / (2 * pow($stdevUmurLebih,2)))));
-         //P(Umur|Obesitas)
+        if(isset($meanUmurBuruk)){
+            $probUmurBuruk = (1/sqrt(2 * 3.14  * $stdevUmurBuruk)) * (exp(-( pow( $age - $meanUmurBuruk ,2) / (2 * pow($stdevUmurBuruk,2)))));
+        }
+        //P(Umur|Kurang)
+        if(isset($meanUmurKurang)){
+            $probUmurKurang = (1/sqrt(2 * 3.14  * $stdevUmurKurang)) * (exp(-( pow( $age - $meanUmurKurang ,2) / (2 * pow($stdevUmurKurang,2)))));
+        }
+        //P(Umur|Baik)
+        if(isset($meanUmurBaik)){
+            $probUmurBaik = (1/sqrt(2 * 3.14  * $stdevUmurBaik)) * (exp(-( pow( $age - $meanUmurBaik ,2) / (2 * pow($stdevUmurBaik,2)))));
+        }
+        //P(Umur|ResikoLebih)
+        if(isset($meanUmurResikoLebih)){
+            $probUmurResikoLebih = (1/sqrt(2 * 3.14  * $stdevUmurResikoLebih)) * (exp(-( pow( $age - $meanUmurResikoLebih ,2) / (2 * pow($stdevUmurResikoLebih,2)))));
+        }
+        //P(Umur|Lebih)
+        if(isset($meanUmurLebih)){
+            $probUmurLebih = (1/sqrt(2 * 3.14  * $stdevUmurLebih)) * (exp(-( pow( $age - $meanUmurLebih ,2) / (2 * pow($stdevUmurLebih,2)))));
+        }
+        //P(Umur|Obesitas)
+        if(isset($meanUmurObesitas)){
          $probUmurObesitas = (1/sqrt(2 * 3.14  * $stdevUmurObesitas)) * (exp(-( pow( $age - $meanUmurObesitas ,2) / (2 * pow($stdevUmurObesitas,2)))));
-         
+        }
          //BB
          //P(BB|Buruk)
-         $probBBBuruk = (1/sqrt(2 * 3.14  * $stdevBBBuruk)) * (exp(-( pow( $weight - $meanBBBuruk ,2) / (2 * pow($stdevBBBuruk,2)))));
+         if(isset($meanBBBuruk)){
+            $probBBBuruk = (1/sqrt(2 * 3.14  * $stdevBBBuruk)) * (exp(-( pow( $weight - $meanBBBuruk ,2) / (2 * pow($stdevBBBuruk,2)))));
+         }
          //P(BB|Kurang)
-         $probBBKurang = (1/sqrt(2 * 3.14  * $stdevBBKurang)) * (exp(-( pow( $weight - $meanBBKurang ,2) / (2 * pow($stdevBBKurang,2)))));
+         if(isset($meanBBKurang)){
+            $probBBKurang = (1/sqrt(2 * 3.14  * $stdevBBKurang)) * (exp(-( pow( $weight - $meanBBKurang ,2) / (2 * pow($stdevBBKurang,2)))));
+         }
          //P(BB|Baik)
-         $probBBBaik = (1/sqrt(2 * 3.14  * $stdevBBBaik)) * (exp(-( pow( $weight - $meanBBBaik ,2) / (2 * pow($stdevBBBaik,2)))));
+         if(isset($meanBBBaik)){
+            $probBBBaik = (1/sqrt(2 * 3.14  * $stdevBBBaik)) * (exp(-( pow( $weight - $meanBBBaik ,2) / (2 * pow($stdevBBBaik,2)))));
+         }
          //P(BB|ResikoLebih)
-         $probBBResikoLebih = (1/sqrt(2 * 3.14  * $stdevBBResikoLebih)) * (exp(-( pow( $weight - $meanBBResikoLebih ,2) / (2 * pow($stdevBBResikoLebih,2)))));
+         if(isset($meanBBResikoLebih)){
+            $probBBResikoLebih = (1/sqrt(2 * 3.14  * $stdevBBResikoLebih)) * (exp(-( pow( $weight - $meanBBResikoLebih ,2) / (2 * pow($stdevBBResikoLebih,2)))));
+         }
          //P(BB|Lebih)
-         $probBBLebih = (1/sqrt(2 * 3.14  * $stdevBBLebih)) * (exp(-( pow( $weight - $meanBBLebih ,2) / (2 * pow($stdevBBLebih,2)))));
+         if(isset($meanBBLebih)){
+            $probBBLebih = (1/sqrt(2 * 3.14  * $stdevBBLebih)) * (exp(-( pow( $weight - $meanBBLebih ,2) / (2 * pow($stdevBBLebih,2)))));
+         }
          //P(BB|Obesitas)
-         $probBBObesitas = (1/sqrt(2 * 3.14  * $stdevBBObesitas)) * (exp(-( pow( $weight - $meanBBObesitas ,2) / (2 * pow($stdevBBObesitas,2)))));
+         if(isset($meanBBObesitas)){
+            $probBBObesitas = (1/sqrt(2 * 3.14  * $stdevBBObesitas)) * (exp(-( pow( $weight - $meanBBObesitas ,2) / (2 * pow($stdevBBObesitas,2)))));
+         }
  
          //TB
          //P(TB|Buruk)
-         $probTBBuruk = (1/sqrt(2 * 3.14  * $stdevTBBuruk)) * (exp(-( pow( $length - $meanTBBuruk ,2) / (2 * pow($stdevTBBuruk,2)))));
+         if(isset($meanTBBuruk)){
+            $probTBBuruk = (1/sqrt(2 * 3.14  * $stdevTBBuruk)) * (exp(-( pow( $length - $meanTBBuruk ,2) / (2 * pow($stdevTBBuruk,2)))));
+         }
          //P(TB|Kurang)
-         $probTBKurang = (1/sqrt(2 * 3.14  * $stdevTBKurang)) * (exp(-( pow( $length - $meanTBKurang ,2) / (2 * pow($stdevTBKurang,2)))));
+         if(isset($meanTBKurang)){
+            $probTBKurang = (1/sqrt(2 * 3.14  * $stdevTBKurang)) * (exp(-( pow( $length - $meanTBKurang ,2) / (2 * pow($stdevTBKurang,2)))));
+         }
          //P(TB|Baik)
-         $probTBBaik = (1/sqrt(2 * 3.14  * $stdevTBBaik)) * (exp(-( pow( $length - $meanTBBaik ,2) / (2 * pow($stdevTBBaik,2)))));
+         if(isset($meanTBBaik)){
+            $probTBBaik = (1/sqrt(2 * 3.14  * $stdevTBBaik)) * (exp(-( pow( $length - $meanTBBaik ,2) / (2 * pow($stdevTBBaik,2)))));
+         }
          //P(TB|ResikoLebih)
-         $probTBResikoLebih = (1/sqrt(2 * 3.14  * $stdevTBResikoLebih)) * (exp(-( pow( $length - $meanTBResikoLebih ,2) / (2 * pow($stdevTBResikoLebih,2)))));
+         if(isset($meanTBResikoLebih)){
+            $probTBResikoLebih = (1/sqrt(2 * 3.14  * $stdevTBResikoLebih)) * (exp(-( pow( $length - $meanTBResikoLebih ,2) / (2 * pow($stdevTBResikoLebih,2)))));
+         }
          //P(TB|Lebih)
-         $probTBLebih = (1/sqrt(2 * 3.14  * $stdevTBLebih)) * (exp(-( pow( $length - $meanTBLebih ,2) / (2 * pow($stdevTBLebih,2)))));
+         if(isset($meanTBLebih)){
+            $probTBLebih = (1/sqrt(2 * 3.14  * $stdevTBLebih)) * (exp(-( pow( $length - $meanTBLebih ,2) / (2 * pow($stdevTBLebih,2)))));
+         }
          //P(TB|Obesitas)
-         $probTBObesitas = (1/sqrt(2 * 3.14  * $stdevTBObesitas)) * (exp(-( pow( $length - $meanTBObesitas ,2) / (2 * pow($stdevTBObesitas,2)))));
+         if(isset($meanTBObesitas)){
+            $probTBObesitas = (1/sqrt(2 * 3.14  * $stdevTBObesitas)) * (exp(-( pow( $length - $meanTBObesitas ,2) / (2 * pow($stdevTBObesitas,2)))));
+         }
  
          //PERHITUNGAN DISKRIT
          $jmlLakilakiBuruk = AdminBaby::get()->where('gender','Laki-laki')->where('status','Buruk')->count();
@@ -941,49 +998,104 @@ class AdminController extends Controller
          $jmlObesitas = AdminBaby::get()->where('status','Obesitas')->count();
  
          if($gender == 'Laki-laki'){
-             $probGenderBuruk = $jmlLakilakiBuruk / $jmlBuruk;
-             $probGenderKurang = $jmlLakilakiKurang / $jmlKurang;
-             $probGenderBaik = $jmlLakilakiBaik / $jmlBaik;
-             $probGenderResikoLebih = $jmlLakilakiResikoLebih / $jmlResikoLebih;
-             $probGenderLebih = $jmlLakilakiLebih / $jmlLebih;
-             $probGenderObesitas = $jmlLakilakiObesitas / $jmlObesitas;
+             if($jmlBuruk>0){
+                 $probGenderBuruk = $jmlLakilakiBuruk / $jmlBuruk;
+             }
+            if($jmlKurang>0){
+                $probGenderKurang = $jmlLakilakiKurang / $jmlKurang;
+              }
+            if($jmlBaik>0){
+                $probGenderBaik = $jmlLakilakiBaik / $jmlBaik;
+              }
+            if($jmlResikoLebih>0){
+                $probGenderResikoLebih = $jmlLakilakiResikoLebih / $jmlResikoLebih;
+              }
+            if($jmlLebih>0){
+                $probGenderLebih = $jmlLakilakiLebih / $jmlLebih;
+              }
+            if($jmlObesitas>0){
+                $probGenderObesitas = $jmlLakilakiObesitas / $jmlObesitas;
+              }
          }        
          
          if($gender == 'Perempuan'){
-             $probGenderBuruk = $jmlPerempuanBuruk / $jmlBuruk;
-             $probGenderKurang = $jmlPerempuanKurang / $jmlKurang;
-             $probGenderBaik = $jmlPerempuanBaik / $jmlBaik;
-             $probGenderResikoLebih = $jmlPerempuanResikoLebih / $jmlResikoLebih;
-             $probGenderLebih = $jmlPerempuanLebih / $jmlLebih;
-             $probGenderObesitas = $jmlPerempuanObesitas / $jmlObesitas;
+            if($jmlBuruk>0){ 
+                $probGenderBuruk = $jmlPerempuanBuruk / $jmlBuruk;
+            }
+            if($jmlKurang>0){
+                $probGenderKurang = $jmlPerempuanKurang / $jmlKurang;
+            }
+            if($jmlBaik>0){
+                $probGenderBaik = $jmlPerempuanBaik / $jmlBaik;
+            }
+            if($jmlResikoLebih>0){
+                $probGenderResikoLebih = $jmlPerempuanResikoLebih / $jmlResikoLebih;
+            }
+            if($jmlLebih>0){
+                $probGenderLebih = $jmlPerempuanLebih / $jmlLebih;
+            }
+            if($jmlObesitas>0){
+                $probGenderObesitas = $jmlPerempuanObesitas / $jmlObesitas;
+            }
          }        
  
          //LIKELIHOOD
          ///Likelihood Buruk
-         $likelihoodBuruk = $probUmurBuruk * $probBBBuruk * $probTBBuruk * $probGenderBuruk;
+        if(isset($probUmurBuruk)){
+            $likelihoodBuruk = $probUmurBuruk * $probBBBuruk * $probTBBuruk * $probGenderBuruk;
+        }
        
          ///Likelihood Kurang
-         $likelihoodKurang = $probUmurKurang * $probBBKurang * $probTBKurang * $probGenderKurang;
+         if(isset($probUmurKurang)){
+            $likelihoodKurang = $probUmurKurang * $probBBKurang * $probTBKurang * $probGenderKurang;
+         }
          
          ///Likelihood Baik
-         $likelihoodBaik = $probUmurBaik * $probBBBaik * $probTBBaik * $probGenderBaik;
+         if(isset($probUmurBaik)){
+            $likelihoodBaik = $probUmurBaik * $probBBBaik * $probTBBaik * $probGenderBaik;
+         }
          
          ///Likelihood ResikoLebih
-         $likelihoodResikoLebih = $probUmurResikoLebih * $probBBResikoLebih * $probTBResikoLebih * $probGenderResikoLebih;
+         if(isset($probUmurResikoLebih)){
+            $likelihoodResikoLebih = $probUmurResikoLebih * $probBBResikoLebih * $probTBResikoLebih * $probGenderResikoLebih;
+         }
       
          ///Likelihood Lebih
-         $likelihoodLebih = $probUmurLebih * $probBBLebih * $probTBLebih * $probGenderLebih;
+         if(isset($probUmurLebih)){
+            $likelihoodLebih = $probUmurLebih * $probBBLebih * $probTBLebih * $probGenderLebih;
+         }
       
          ///Likelihood Obesitas
-         $likelihoodObesitas = $probUmurObesitas * $probBBObesitas * $probTBObesitas * $probGenderObesitas;
+         if(isset($probUmurObesitas)){
+            $likelihoodObesitas = $probUmurObesitas * $probBBObesitas * $probTBObesitas * $probGenderObesitas;
+         }
  
          //KALLIKAN PROBABILITAS
-         $probabilitasBuruk = $likelihoodBuruk * $probabilitasKelasBuruk;
-         $probabilitasKurang = $likelihoodKurang * $probabilitasKelasKurang;
-         $probabilitasBaik = $likelihoodBaik * $probabilitasKelasBaik;
-         $probabilitasResikoLebih = $likelihoodResikoLebih * $probabilitasKelasResikoLebih;
-         $probabilitasLebih = $likelihoodLebih * $probabilitasKelasLebih;
-         $probabilitasObesitas = $likelihoodObesitas * $probabilitasKelasObesitas;
+         $probabilitasBuruk = 0;
+         $probabilitasKurang = 0;
+         $probabilitasBaik = 0;
+         $probabilitasResikoLebih = 0;
+         $probabilitasLebih = 0;
+         $probabilitasObesitas = 0;
+
+         if(isset($likelihoodBuruk)){
+             $probabilitasBuruk = $likelihoodBuruk * $probabilitasKelasBuruk;
+         }
+         if(isset($likelihoodKurang)){
+            $probabilitasKurang = $likelihoodKurang * $probabilitasKelasKurang;
+         }
+         if(isset($likelihoodBaik)){
+            $probabilitasBaik = $likelihoodBaik * $probabilitasKelasBaik;
+         }
+         if(isset($likelihoodResikoLebih)){
+            $probabilitasResikoLebih = $likelihoodResikoLebih * $probabilitasKelasResikoLebih;
+         }
+         if(isset($likelihoodLebih)){
+            $probabilitasLebih = $likelihoodLebih * $probabilitasKelasLebih;
+         }
+         if(isset($likelihoodObesitas)){
+            $probabilitasObesitas = $likelihoodObesitas * $probabilitasKelasObesitas;
+         }
          
          //HASIL STATUS GIZI
          $highestProbability = 0;
